@@ -13,6 +13,9 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get('users',  ['middleware' => ['authenticate', 'onlysuperuser'], 'uses' => 'UserController@list']);
+    $router->get('users/iam', ['middleware' => ['authenticate'], 'uses' => 'UserController@iam']);
+    $router->get('users/{id}', ['middleware' => ['authenticate', 'onlysuperuser'], 'uses' => 'UserController@findById']);
+    $router->post('users', ['middleware' => ['authenticate', 'onlysuperuser'], 'uses' => 'UserController@create']);
 });

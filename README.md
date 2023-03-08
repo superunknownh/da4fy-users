@@ -15,3 +15,15 @@ Create migration:
 Run migrations:
 
     php artisan migrate
+
+Rollback migration:
+
+    php artisan migrate:rollback
+
+Create seeder:
+
+    php artisan make:seeder UserSeeder
+
+Run seeder:
+
+    php artisan db:seed
