@@ -20,14 +20,25 @@ class UserController extends Controller
     public function findById($id)
     {
         Log::info("GET /api/users/$id", []);
-        return response()->json(User::find($id));
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(null, Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($user);
     }
 
     public function iam(Request $request)
     {
-        $user_email = $request->header('PHP_AUTH_USER');
-        Log::info('GET /api/users/iam', [$user_email]);
-        return response()->json(User::where('email', $user_email)->first());
+        $user_auth = $request->header('PHP_AUTH_USER');
+        Log::info('GET /api/users/iam', [$user_auth]);
+        $user = User::where('email', $user_auth)->first();
+        if (!$user) {
+            $user = User::find($user_auth);
+        }
+        if (!$user) {
+            return response()->json(null, Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($user);
     }
 
     public function create(Request $request)

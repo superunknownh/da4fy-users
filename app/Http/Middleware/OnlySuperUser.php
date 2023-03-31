@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 
 class OnlySuperUser
@@ -16,10 +17,17 @@ class OnlySuperUser
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        $user_email = $request->header('PHP_AUTH_USER');
-        $user = User::where('email', $user_email)->first();
+        $user_auth = $request->header('PHP_AUTH_USER');
+        Log::info('OnlySuperUser::handle -> GET /api/users/iam', [$user_auth]);
+        $user = User::where('email', $user_auth)->first();
+        if (!$user) {
+            $user = User::find($user_auth);
+        }
+        if (!$user) {
+            return response()->json(null, Response::HTTP_NOT_FOUND);
+        }
         if (!$user->is_super_user) {
             return response(null, Response::HTTP_UNAUTHORIZED);
         }

@@ -16,10 +16,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => env('ROOT_NAME'),
-            'email' => env('ROOT_EMAIL'),
-            'password' => Hash::make(env('ROOT_PASSWORD')),
-            'is_super_user' => true
+            [
+                'name' => env('ROOT_NAME'),
+                'email' => env('ROOT_EMAIL'),
+                'password' => Hash::make(env('ROOT_PASSWORD')),
+                'is_super_user' => true
+            ],
+            [
+                'name' => env('DA4FY_APP_NAME'),
+                'email' => env('DA4FY_APP_EMAIL'),
+                'password' => Hash::make(env('DA4FY_APP_PASSWORD')),
+                'is_super_user' => true
+            ],
         ]);
     }
 }
